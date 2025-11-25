@@ -49,7 +49,7 @@ interface SttInputDeviceWrapper {
 }
 
 class SttInputDeviceWrapperImpl(
-    @ApplicationContext private val appContext: Context,
+    @param:ApplicationContext private val appContext: Context,
     private val dataStore: DataStore<UserSettings>,
     private val localeManager: LocaleManager,
     private val okHttpClient: OkHttpClient,
