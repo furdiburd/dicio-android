@@ -9,6 +9,7 @@ import androidx.compose.material.icons.filled.Cloud
 import androidx.compose.material.icons.filled.ColorLens
 import androidx.compose.material.icons.filled.DarkMode
 import androidx.compose.material.icons.filled.Hearing
+import androidx.compose.material.icons.filled.HourglassEmpty
 import androidx.compose.material.icons.filled.InvertColors
 import androidx.compose.material.icons.filled.KeyboardAlt
 import androidx.compose.material.icons.filled.Language
@@ -172,7 +173,7 @@ fun speechOutputDevice() = ListSetting(
 @Composable
 fun sttSilenceDuration() = IntSetting(
     title = stringResource(R.string.pref_stt_silence_duration_title),
-    icon = Icons.AutoMirrored.Filled.Send,
+    icon = Icons.Default.HourglassEmpty,
     description = @Composable { stringResource(R.string.pref_stt_silence_duration_description, it) },
     minimum = 1,
     maximum = 7,

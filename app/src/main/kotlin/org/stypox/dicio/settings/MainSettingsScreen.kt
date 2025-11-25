@@ -32,6 +32,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import org.stypox.dicio.R
+import org.stypox.dicio.io.input.vosk.VoskInputDevice
 import org.stypox.dicio.settings.datastore.InputDevice
 import org.stypox.dicio.settings.datastore.Language
 import org.stypox.dicio.settings.datastore.SpeechOutputDevice
@@ -189,8 +190,9 @@ private fun MainSettingsScreen(
         }
         item {
             sttSilenceDuration().Render(
-                settings.sttSilenceDuration + 1,
-            ) { viewModel.setSttSilenceDuration(it - 1) }
+                VoskInputDevice.getSttSilenceDurationOrDefault(settings),
+                viewModel::setSttSilenceDuration,
+            )
         }
         item {
             sttAutoFinish().Render(

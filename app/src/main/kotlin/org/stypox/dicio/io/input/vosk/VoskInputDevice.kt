@@ -22,6 +22,7 @@ package org.stypox.dicio.io.input.vosk
 import android.content.Context
 import android.util.Log
 import androidx.core.os.LocaleListCompat
+import androidx.datastore.core.DataStore
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -29,8 +30,10 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.getAndUpdate
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import okhttp3.OkHttpClient
 import org.stypox.dicio.di.LocaleManager
 import org.stypox.dicio.io.input.InputEvent
@@ -50,6 +53,7 @@ import org.stypox.dicio.io.input.vosk.VoskState.NotInitialized
 import org.stypox.dicio.io.input.vosk.VoskState.NotLoaded
 import org.stypox.dicio.io.input.vosk.VoskState.Unzipping
 import org.stypox.dicio.settings.datastore.UserSettings
+import org.stypox.dicio.settings.datastore.copy
 import org.stypox.dicio.ui.util.Progress
 import org.stypox.dicio.util.FileToDownload
 import org.stypox.dicio.util.LocaleUtils
@@ -70,7 +74,7 @@ class VoskInputDevice(
     @ApplicationContext appContext: Context,
     private val okHttpClient: OkHttpClient,
     localeManager: LocaleManager,
-    private val settings: UserSettings,
+    private val dataStore: DataStore<UserSettings>,
 ) : SttInputDevice {
 
     private val _state: MutableStateFlow<VoskState>
@@ -430,7 +434,8 @@ class VoskInputDevice(
         eventListener: (InputEvent) -> Unit,
     ) {
         _state.value = Listening(speechService, eventListener)
-        speechService.startListening(VoskListener(this, eventListener, settings.sttSilenceDuration, speechService))
+        val sttSilenceDuration = runBlocking { getSttSilenceDurationOrDefault(dataStore.data.first()) }
+        speechService.startListening(VoskListener(this, eventListener, sttSilenceDuration - 1, speechService))
     }
 
     /**
@@ -489,5 +494,15 @@ class VoskInputDevice(
             "uz" to "https://alphacephei.com/vosk/models/vosk-model-small-uz-0.22.zip",
             "ko" to "https://alphacephei.com/vosk/models/vosk-model-small-ko-0.22.zip",
         )
+
+        private const val DEFAULT_STT_SILENCE_DURATION = 2
+
+        fun getSttSilenceDurationOrDefault(settings: UserSettings): Int =
+            if (settings.sttSilenceDuration == 0) {
+                DEFAULT_STT_SILENCE_DURATION
+            } else {
+                assert(settings.sttSilenceDuration > 0)
+                settings.sttSilenceDuration
+            }
     }
 }
