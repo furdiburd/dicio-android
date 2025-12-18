@@ -261,5 +261,5 @@
     <string name="skill_sentence_example_flashlight">Turn on the flashlight</string>
     <string name="skill_flashlight_turned_on">Flashlight turned on</string>
     <string name="skill_flashlight_turned_off">Flashlight turned off</string>
-    <string name="skill_flashlight_error">Could not control the flashlight</string>
+    <string name="skill_flashlight_error">Unable to control the flashlight</string>
 </resources>
