@@ -32,7 +32,7 @@ class FlashlightSkill(
                     FlashlightOutput(success = true, turnedOn = false)
                 }
             }
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             FlashlightOutput(success = false, turnedOn = false)
         }
     }
