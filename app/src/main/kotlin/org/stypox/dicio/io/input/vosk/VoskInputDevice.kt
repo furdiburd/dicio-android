@@ -487,15 +487,5 @@ class VoskInputDevice(
             "tg" to "https://alphacephei.com/vosk/models/vosk-model-small-tg-0.22.zip",
             "te" to "https://alphacephei.com/vosk/models/vosk-model-small-te-0.42.zip",
         )
-
-        private const val DEFAULT_STT_SILENCE_DURATION = 2
-
-        fun getSttSilenceDurationOrDefault(settings: UserSettings): Int =
-            if (settings.sttSilenceDuration == 0) {
-                DEFAULT_STT_SILENCE_DURATION
-            } else {
-                assert(settings.sttSilenceDuration > 0)
-                settings.sttSilenceDuration
-            }
     }
 }

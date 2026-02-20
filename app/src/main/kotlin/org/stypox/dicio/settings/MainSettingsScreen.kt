@@ -32,13 +32,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import org.stypox.dicio.R
-import org.stypox.dicio.io.input.vosk.VoskInputDevice
+import org.stypox.dicio.io.input.SttInputDevice
 import org.stypox.dicio.settings.datastore.InputDevice
 import org.stypox.dicio.settings.datastore.Language
 import org.stypox.dicio.settings.datastore.SpeechOutputDevice
 import org.stypox.dicio.settings.datastore.SttPlaySound
 import org.stypox.dicio.settings.datastore.Theme
-import org.stypox.dicio.settings.datastore.UserSettings
 import org.stypox.dicio.settings.datastore.UserSettingsModule.Companion.newDataStoreForPreviews
 import org.stypox.dicio.settings.datastore.WakeDevice
 import org.stypox.dicio.settings.ui.SettingsCategoryTitle
@@ -191,8 +190,9 @@ private fun MainSettingsScreen(
         }
         item {
             sttSilenceDuration().Render(
-                settings.sttSilenceDuration + 1,
-            ) { viewModel.setSttSilenceDuration(it - 1) }
+                SttInputDevice.getSttSilenceDurationOrDefault(settings),
+                viewModel::setSttSilenceDuration
+            )
         }
         item {
             sttAutoFinish().Render(

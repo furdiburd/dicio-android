@@ -77,7 +77,7 @@ class SttInputDeviceWrapperImpl(
 
         inputDeviceSetting = firstSettings.first
         sttPlaySoundSetting = firstSettings.second
-        silencesBeforeStop = dataStore.data.map { it.sttSilenceDuration }
+        silencesBeforeStop = dataStore.data.map(SttInputDevice::getSttSilenceDurationOrDefault)
             .toStateFlowDistinctBlockingFirst(scope)
         sttInputDevice = buildInputDevice(inputDeviceSetting)
         scope.launch {

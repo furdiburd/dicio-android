@@ -32,9 +32,8 @@ import org.vosk.android.SpeechService
  * Vosk [SpeechService], pushes them to [eventListener], and handles the listening state via
  * [VoskInputDevice].
  *
- * @param silencesBeforeStop how many times to ignore a "silence" output and continue listening; 0
- * means "quit as soon as silence is detected" (the default behavior), 1 means "quit after 2
- * silences", etc.
+ * @param silencesBeforeStop how many times Vosk should report a "silence" before giving up trying
+ * to get speech; must be `>= 1`, and setting this to 1 is equivalent to disabling this feature
  */
 internal class VoskListener(
     private val voskInputDevice: VoskInputDevice,
@@ -85,7 +84,7 @@ internal class VoskListener(
             return
         }
 
-        if (inputs.isEmpty() && silencesBeforeStop > 0) {
+        if (inputs.isEmpty() && silencesBeforeStop > 1) {
             silencesBeforeStop -= 1
             return
         }
