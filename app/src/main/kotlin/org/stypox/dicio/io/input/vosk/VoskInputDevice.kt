@@ -21,7 +21,6 @@ package org.stypox.dicio.io.input.vosk
 
 import android.content.Context
 import android.util.Log
-import androidx.datastore.core.DataStore
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -29,10 +28,8 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.getAndUpdate
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import okhttp3.OkHttpClient
 import org.stypox.dicio.BuildConfig
 import org.stypox.dicio.di.LocaleManager
@@ -72,7 +69,7 @@ class VoskInputDevice(
     @ApplicationContext appContext: Context,
     private val okHttpClient: OkHttpClient,
     localeManager: LocaleManager,
-    private val dataStore: DataStore<UserSettings>,
+    private val silencesBeforeStop: StateFlow<Int>
 ) : SttInputDevice {
 
     private val _state: MutableStateFlow<VoskState>
@@ -424,8 +421,7 @@ class VoskInputDevice(
         eventListener: (InputEvent) -> Unit,
     ) {
         _state.value = Listening(speechService, eventListener)
-        val sttSilenceDuration = runBlocking { getSttSilenceDurationOrDefault(dataStore.data.first()) }
-        speechService.startListening(VoskListener(this, eventListener, sttSilenceDuration - 1, speechService))
+        speechService.startListening(VoskListener(this, eventListener, silencesBeforeStop.value, speechService))
     }
 
     /**

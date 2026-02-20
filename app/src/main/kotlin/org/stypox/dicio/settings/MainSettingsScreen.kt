@@ -38,6 +38,7 @@ import org.stypox.dicio.settings.datastore.Language
 import org.stypox.dicio.settings.datastore.SpeechOutputDevice
 import org.stypox.dicio.settings.datastore.SttPlaySound
 import org.stypox.dicio.settings.datastore.Theme
+import org.stypox.dicio.settings.datastore.UserSettings
 import org.stypox.dicio.settings.datastore.UserSettingsModule.Companion.newDataStoreForPreviews
 import org.stypox.dicio.settings.datastore.WakeDevice
 import org.stypox.dicio.settings.ui.SettingsCategoryTitle
@@ -190,9 +191,8 @@ private fun MainSettingsScreen(
         }
         item {
             sttSilenceDuration().Render(
-                VoskInputDevice.getSttSilenceDurationOrDefault(settings),
-                viewModel::setSttSilenceDuration,
-            )
+                settings.sttSilenceDuration + 1,
+            ) { viewModel.setSttSilenceDuration(it - 1) }
         }
         item {
             sttAutoFinish().Render(
