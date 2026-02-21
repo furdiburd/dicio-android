@@ -42,6 +42,7 @@ Currently Dicio answers questions about:
 - **translation**: translate from/to any language with **Lingva** - _How do I say Football in German?_
 - **wake word control**: turn on/off the wakeword - _Stop listening_
 - **notifications**: reads all notifications currently in the status bar - _What are my notifications?_
+- **flashlight**: turn on/off the phone flashlight - _Turn on the flashlight_
 
 ## Speech to text
 

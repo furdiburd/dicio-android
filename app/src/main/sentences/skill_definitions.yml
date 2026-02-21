@@ -69,6 +69,12 @@ skills:
     sentences:
       - id: notifications
 
+  - id: flashlight
+    specificity: high
+    sentences:
+      - id: turn_on
+      - id: turn_off
+
   - id: search
     specificity: low
     sentences:
