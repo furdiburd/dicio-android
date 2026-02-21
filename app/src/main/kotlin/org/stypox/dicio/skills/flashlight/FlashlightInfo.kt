@@ -1,5 +1,6 @@
 package org.stypox.dicio.skills.flashlight
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
 import androidx.compose.material.icons.Icons
@@ -28,6 +29,7 @@ object FlashlightInfo : SkillInfo("flashlight") {
                 ctx.android.packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH)
     }
 
+    @SuppressLint("NewApi") // since build() is not called if isAvailable() returned false
     override fun build(ctx: SkillContext): Skill<*> {
         return FlashlightSkill(FlashlightInfo, Sentences.Flashlight[ctx.sentencesLanguage]!!)
     }
