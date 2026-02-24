@@ -26,7 +26,7 @@ class NavigationSkill(correspondingSkillInfo: SkillInfo, data: StandardRecognize
             val strNums: List<Any> = npf
                 .extractNumber(placeToNavigate)
                 .preferOrdinal(true)
-                .mixedWithText
+                .parseMixedWithText()
                 .flatMap { item ->
                     if (item is String) {
                         // allows checking whether there are two single letters next to each other

@@ -26,7 +26,7 @@ class TimerSkill(correspondingSkillInfo: SkillInfo, data: StandardRecognizerData
         return when (inputData) {
             is Timer.Set -> {
                 val duration = inputData.duration?.let {
-                    ctx.parserFormatter?.extractDuration(it)?.first?.toJavaDuration()
+                    ctx.parserFormatter?.extractDuration(it)?.parseFirst()?.toJavaDuration()
                 }
                 if (duration == null) {
                     TimerOutput.SetAskDuration { setTimer(ctx, it, inputData.name) }
