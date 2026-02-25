@@ -59,7 +59,7 @@ fun Triple<Construct, String, Array<StandardScore>>.shouldChangeMemToEndInto(
         changedMemToEnd should beEqualToPlusOrMinus(*normalizedChangedMemToEnd)
     }
 
-    val helper = MatchHelper(userInput)
+    val helper = MatchHelper(null, userInput)
     construct.matchToEnd(startingMemToEnd, helper)
 
     // checking that changedMemToEnd is normalized above
@@ -75,7 +75,7 @@ fun Triple<Construct, String, Array<StandardScore>>.shouldNotMatchAnything(
         .map { it.plus(refWeight = additionalRefWeight) }
         .toTypedArray()
 
-    val helper = MatchHelper(userInput)
+    val helper = MatchHelper(null, userInput)
     construct.matchToEnd(startingMemToEnd, helper)
 
     startingMemToEnd should beEqualToPlusOrMinus(*changedMemToEnd)

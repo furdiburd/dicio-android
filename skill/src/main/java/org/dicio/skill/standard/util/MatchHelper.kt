@@ -1,6 +1,9 @@
 package org.dicio.skill.standard.util
 
+import org.dicio.numbers.ParserFormatter
+
 data class MatchHelper(
+    val parserFormatter: ParserFormatter?,
     val userInput: String,
 ) {
     val splitWords = splitWords(userInput)
