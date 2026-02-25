@@ -1,7 +1,7 @@
 package org.dicio.skill.standard.construct
 
 import org.dicio.skill.standard.StandardScore
-import org.dicio.skill.standard.capture.StringRangeCapture
+import org.dicio.skill.standard.capture.StringCapture
 import org.dicio.skill.standard.util.MatchHelper
 import org.dicio.skill.standard.util.normalizeMemToEnd
 
@@ -34,7 +34,7 @@ data class CapturingConstruct(
                 userWeight = userWeight,
                 refMatched = weight,
                 refWeight = weight,
-                capturingGroup = StringRangeCapture(name, start, lastCapturingGroupEnd),
+                capturingGroup = StringCapture(name, start, lastCapturingGroupEnd),
             )
 
             if (ifContinuingCapturingGroup.score() >= ifSkippingCapturingGroup.score()) {

@@ -7,8 +7,8 @@ import io.kotest.matchers.MatcherResult
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.should
 import org.dicio.skill.standard.StandardScore
-import org.dicio.skill.standard.capture.NamedCapture
-import org.dicio.skill.standard.capture.StringRangeCapture
+import org.dicio.skill.standard.capture.Capture
+import org.dicio.skill.standard.capture.StringCapture
 import org.dicio.skill.standard.util.MatchHelper
 import org.dicio.skill.standard.util.cumulativeWeight
 import org.dicio.skill.standard.util.initialMemToEnd
@@ -86,7 +86,7 @@ fun s(
     userWeight: Float,
     refMatched: Float,
     refWeight: Float,
-    vararg capturingGroups: NamedCapture
+    vararg capturingGroups: Capture
 ): StandardScore {
     var result = StandardScore(
         userMatched = userMatched,
@@ -103,11 +103,11 @@ fun s(
     return result
 }
 
-fun capt(name: String, start: Int, end: Int): StringRangeCapture {
-    return StringRangeCapture(name, start, end)
+fun capt(name: String, start: Int, end: Int): StringCapture {
+    return StringCapture(name, start, end)
 }
 
-fun flattenCapturingGroups(node: Any?): Set<NamedCapture> {
+fun flattenCapturingGroups(node: Any?): Set<Capture> {
     return when (node) {
         null ->
             setOf()
@@ -116,7 +116,7 @@ fun flattenCapturingGroups(node: Any?): Set<NamedCapture> {
             flattenCapturingGroups(node.first) +
                     flattenCapturingGroups(node.second)
 
-        is NamedCapture ->
+        is Capture ->
             setOf(node)
 
         else ->
