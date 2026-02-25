@@ -12,6 +12,7 @@ import kotlin.time.Duration.Companion.seconds
 import kotlin.time.TimeSource
 import kotlin.time.measureTime
 import org.dicio.skill.context.SkillContext
+import org.dicio.skill.standard.util.MatchHelper
 
 const val saveFolder = "benchmarks/999_current"
 
@@ -21,7 +22,10 @@ fun FunSpec.benchmarkContext(
     f: suspend BenchmarkRunner.() -> Unit
 ) {
     context(name) {
-        val runner = BenchmarkRunner(this, name, scoreFunction)
+        val runner = BenchmarkRunner(this, name) { skillContext, input ->
+            skillContext.standardMatchHelper = MatchHelper(null, input)
+            scoreFunction(skillContext, input)
+        }
         f(runner)
         runner.saveJson()
     }
@@ -34,7 +38,7 @@ class BenchmarkRunner(
 ) {
     private var incrementalJsonData = "[]"
     private var benchmarksJsonData = ArrayList<String>()
-    private val skillContext = MockSkillContext
+    private val skillContext = MockSkillContext()
 
     fun warmup(vararg inputs: String) {
         for (input in inputs) {

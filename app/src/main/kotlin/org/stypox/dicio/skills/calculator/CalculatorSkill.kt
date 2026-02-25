@@ -16,10 +16,11 @@ class CalculatorSkill(correspondingSkillInfo: SkillInfo, data: StandardRecognize
     : StandardRecognizerSkill<Calculator>(correspondingSkillInfo, data) {
 
     private fun getOperation(
+        ctx: SkillContext,
         operatorSection: StandardRecognizerData<CalculatorOperators>,
         text: String
     ): CalculatorOperators? {
-        val (score, result) = operatorSection.score(text)
+        val (score, result) = operatorSection.score(ctx, text)
         return if (score.scoreIn01Range() < 0.3) {
             null
         } else {
@@ -52,7 +53,7 @@ class CalculatorSkill(correspondingSkillInfo: SkillInfo, data: StandardRecognize
             i = 1
         } else {
             firstNumber = textWithNumbers[1] as Number
-            if (getOperation(operatorRecognizerData, textWithNumbers[0] as String)
+            if (getOperation(ctx, operatorRecognizerData, textWithNumbers[0] as String)
                 == CalculatorOperators.Subtraction
             ) {
                 firstNumber = firstNumber.multiply(-1)
@@ -78,7 +79,7 @@ class CalculatorSkill(correspondingSkillInfo: SkillInfo, data: StandardRecognize
             if (textWithNumbers[i] is Number) {
                 operation = CalculatorOperators.Addition
             } else if (i + 1 < textWithNumbers.size) {
-                operation = getOperation(operatorRecognizerData, textWithNumbers[i] as String)
+                operation = getOperation(ctx, operatorRecognizerData, textWithNumbers[i] as String)
                     ?: CalculatorOperators.Addition // perform addition by default
                 ++i
             } else {
