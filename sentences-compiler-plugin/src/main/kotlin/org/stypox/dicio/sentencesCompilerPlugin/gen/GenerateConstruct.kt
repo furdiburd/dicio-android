@@ -31,23 +31,23 @@ fun generateConstruct(construct: Construct): CodeBlock {
 
 fun generateWord(word: Word): CodeBlock {
     return CodeBlock.of(
-        "%T(%S, %L, %L, %Lf)",
+        "%T(%S, %L, %L)",
         ClassName("org.dicio.skill.standard.construct", "WordConstruct"),
         word.normalizedValue,
         /* isRegex = */ false,
         word.isDiacriticsSensitive,
-        1.0f // TODO allow specifying weight
+        // TODO allow specifying weight
     )
 }
 
 fun generateWordWithVariations(word: WordWithVariations): CodeBlock {
     return CodeBlock.of(
-        "%T(%S, %L, %L, %Lf)",
+        "%T(%S, %L, %L)",
         ClassName("org.dicio.skill.standard.construct", "WordConstruct"),
         word.toJavaRegex(),
         /* isRegex = */ true,
         word.isDiacriticsSensitive,
-        1.0f // TODO allow specifying weight
+        // TODO allow specifying weight
     )
 }
 
@@ -68,10 +68,10 @@ fun generateOptionalConstruct(): CodeBlock {
 
 fun generateCapturingGroup(capturingGroup: CapturingGroup): CodeBlock {
     return CodeBlock.of(
-        "%T(%S, %Lf)",
+        "%T(%S)",
         ClassName("org.dicio.skill.standard.construct", "CapturingConstruct"),
         capturingGroup.name,
-        0.0f // TODO allow specifying weight
+        // TODO allow specifying weight
     )
 }
 

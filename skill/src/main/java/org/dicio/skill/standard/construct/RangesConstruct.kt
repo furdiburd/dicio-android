@@ -15,8 +15,8 @@ import org.dicio.skill.standard.util.normalizeMemToEnd
  */
 abstract class RangesConstruct<T>(
     private val name: String,
-    private val weight: Float,
-    private val bonusIfLargestPossible: Float,
+    private val weight: Float = DEFAULT_WEIGHT,
+    private val bonusIfLargestPossible: Float = DEFAULT_BONUS_IF_LARGEST_POSSIBLE,
 ) : Construct {
 
     /**
@@ -74,5 +74,12 @@ abstract class RangesConstruct<T>(
 
     override fun toString(): String {
         return ".$name:${this::class.simpleName?.removeSuffix("Construct")}."
+    }
+
+    companion object {
+        // TODO these seem sensible default values after playing around a bit, but they haven't been
+        //  fine-tuned very well
+        protected const val DEFAULT_WEIGHT = 1.0f
+        protected const val DEFAULT_BONUS_IF_LARGEST_POSSIBLE = 0.5f
     }
 }

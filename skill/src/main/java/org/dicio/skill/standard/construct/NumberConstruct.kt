@@ -10,11 +10,11 @@ import org.dicio.skill.standard.util.MatchHelper
  */
 class NumberConstruct(
     name: String,
-    weight: Float,
-    bonusIfLargestPossible: Float,
-    private val shortScale: Boolean,
-    private val preferOrdinal: Boolean,
-    private val integerOnly: Boolean,
+    weight: Float = DEFAULT_WEIGHT,
+    bonusIfLargestPossible: Float = DEFAULT_BONUS_IF_LARGEST_POSSIBLE,
+    private val shortScale: Boolean = true,
+    private val preferOrdinal: Boolean = false,
+    private val integerOnly: Boolean = false,
 ) : RangesConstruct<Number>(name, weight, bonusIfLargestPossible) {
 
     override fun parserParams(helper: MatchHelper): ParserParams<Number>? {

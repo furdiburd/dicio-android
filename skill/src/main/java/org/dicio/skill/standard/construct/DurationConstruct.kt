@@ -10,9 +10,9 @@ import org.dicio.skill.standard.util.MatchHelper
  */
 class DurationConstruct(
     name: String,
-    weight: Float,
-    bonusIfLargestPossible: Float,
-    private val shortScale: Boolean,
+    weight: Float = DEFAULT_WEIGHT,
+    bonusIfLargestPossible: Float = DEFAULT_BONUS_IF_LARGEST_POSSIBLE,
+    private val shortScale: Boolean = true,
 ) : RangesConstruct<Duration>(name, weight, bonusIfLargestPossible) {
 
     override fun parserParams(helper: MatchHelper): ParserParams<Duration>? {

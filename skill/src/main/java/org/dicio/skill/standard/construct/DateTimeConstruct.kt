@@ -10,11 +10,11 @@ import org.dicio.skill.standard.util.MatchHelper
  */
 class DateTimeConstruct(
     name: String,
-    weight: Float,
-    bonusIfLargestPossible: Float,
-    private val now: () -> LocalDateTime,
-    private val shortScale: Boolean,
-    private val preferMonthBeforeDay: Boolean,
+    weight: Float = DEFAULT_WEIGHT,
+    bonusIfLargestPossible: Float = DEFAULT_BONUS_IF_LARGEST_POSSIBLE,
+    private val now: () -> LocalDateTime = { LocalDateTime.now() },
+    private val shortScale: Boolean = true,
+    private val preferMonthBeforeDay: Boolean = false,
 ) : RangesConstruct<LocalDateTime>(name, weight, bonusIfLargestPossible) {
 
     override fun parserParams(helper: MatchHelper): ParserParams<LocalDateTime>? {
