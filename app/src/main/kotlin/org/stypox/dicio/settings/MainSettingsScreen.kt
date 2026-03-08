@@ -123,13 +123,18 @@ private fun MainSettingsScreen(
 
         /* INPUT AND OUTPUT METHODS */
         item { SettingsCategoryTitle(stringResource(R.string.pref_io)) }
+        val selectedInputDevice = when (val inputDevice = settings.inputDevice) {
+            InputDevice.UNRECOGNIZED,
+            InputDevice.INPUT_DEVICE_UNSET -> InputDevice.INPUT_DEVICE_VOSK
+            InputDevice.INPUT_DEVICE_PARAKEET -> {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) inputDevice
+                else InputDevice.INPUT_DEVICE_VOSK
+            }
+            else -> inputDevice
+        }
         item {
             inputDevice().Render(
-                when (val inputDevice = settings.inputDevice) {
-                    InputDevice.UNRECOGNIZED,
-                    InputDevice.INPUT_DEVICE_UNSET -> InputDevice.INPUT_DEVICE_VOSK
-                    else -> inputDevice
-                },
+                selectedInputDevice,
                 viewModel::setInputDevice,
             )
         }
