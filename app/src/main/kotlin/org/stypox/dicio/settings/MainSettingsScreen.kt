@@ -14,6 +14,7 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.DeleteSweep
 import androidx.compose.material.icons.filled.Extension
 import androidx.compose.material.icons.filled.UploadFile
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -123,15 +124,33 @@ private fun MainSettingsScreen(
 
         /* INPUT AND OUTPUT METHODS */
         item { SettingsCategoryTitle(stringResource(R.string.pref_io)) }
+        val selectedInputDevice = when (val inputDevice = settings.inputDevice) {
+            InputDevice.UNRECOGNIZED,
+            InputDevice.INPUT_DEVICE_UNSET -> InputDevice.INPUT_DEVICE_VOSK
+            else -> inputDevice
+        }
         item {
             inputDevice().Render(
-                when (val inputDevice = settings.inputDevice) {
-                    InputDevice.UNRECOGNIZED,
-                    InputDevice.INPUT_DEVICE_UNSET -> InputDevice.INPUT_DEVICE_VOSK
-                    else -> inputDevice
-                },
+                selectedInputDevice,
                 viewModel::setInputDevice,
             )
+        }
+        if (selectedInputDevice == InputDevice.INPUT_DEVICE_SCRIBE_REALTIME) {
+            item {
+                scribeApiKeySetting().Render(
+                    settings.scribeApiKey,
+                    viewModel::setScribeApiKey,
+                )
+            }
+            if (settings.scribeApiKey.isBlank()) {
+                item {
+                    SettingsItem(
+                        title = stringResource(R.string.pref_input_method_scribe_api_key_warning_title),
+                        icon = Icons.Default.Warning,
+                        description = stringResource(R.string.pref_input_method_scribe_api_key_warning_description),
+                    )
+                }
+            }
         }
         val wakeDevice = when (val device = settings.wakeDevice) {
             WakeDevice.UNRECOGNIZED,

@@ -33,6 +33,7 @@ import org.stypox.dicio.settings.datastore.WakeDevice
 import org.stypox.dicio.settings.ui.BooleanSetting
 import org.stypox.dicio.settings.ui.IntSetting
 import org.stypox.dicio.settings.ui.ListSetting
+import org.stypox.dicio.settings.ui.StringSetting
 
 
 @Composable
@@ -115,6 +116,12 @@ fun inputDevice() = ListSetting(
             icon = Icons.Default.Mic,
         ),
         ListSetting.Value(
+            value = InputDevice.INPUT_DEVICE_SCRIBE_REALTIME,
+            name = stringResource(R.string.pref_input_method_scribe_realtime),
+            description = stringResource(R.string.pref_input_method_scribe_realtime_summary),
+            icon = Icons.Default.Cloud,
+        ),
+        ListSetting.Value(
             value = InputDevice.INPUT_DEVICE_EXTERNAL_POPUP,
             name = stringResource(R.string.pref_input_method_external_popup),
             description = stringResource(R.string.pref_input_method_external_popup_summary),
@@ -126,6 +133,14 @@ fun inputDevice() = ListSetting(
             icon = Icons.Default.KeyboardAlt,
         ),
     ),
+)
+
+@Composable
+fun scribeApiKeySetting() = StringSetting(
+    title = stringResource(R.string.pref_input_method_scribe_api_key),
+    icon = Icons.Default.Cloud,
+    descriptionWhenEmpty = stringResource(R.string.pref_input_method_scribe_api_key_description_when_empty),
+    description = stringResource(R.string.pref_input_method_scribe_api_key_summary),
 )
 
 @Composable
