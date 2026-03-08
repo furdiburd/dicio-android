@@ -115,6 +115,12 @@ fun inputDevice() = ListSetting(
             icon = Icons.Default.Mic,
         ),
         ListSetting.Value(
+            value = InputDevice.INPUT_DEVICE_PARAKEET,
+            name = stringResource(R.string.pref_input_method_parakeet),
+            description = stringResource(R.string.pref_input_method_parakeet_summary),
+            icon = Icons.Default.Mic,
+        ),
+        ListSetting.Value(
             value = InputDevice.INPUT_DEVICE_EXTERNAL_POPUP,
             name = stringResource(R.string.pref_input_method_external_popup),
             description = stringResource(R.string.pref_input_method_external_popup_summary),
