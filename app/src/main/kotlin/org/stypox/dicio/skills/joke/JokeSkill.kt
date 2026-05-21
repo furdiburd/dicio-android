@@ -22,7 +22,7 @@ class JokeSkill(
                 delivery = joke.getString("punchline")
             )
         // Hungarian API uses "title" / "text" instead of "setup" / "delivery"
-        } else if (locale == "hu") {
+        } else if (resolvedLocale == "hu") {
             val joke: JSONObject = ConnectionUtils.getPageJson(RANDOM_JOKE_URL_HU)
             return JokeOutput.Success(
                 setup = joke.getString("title"),
