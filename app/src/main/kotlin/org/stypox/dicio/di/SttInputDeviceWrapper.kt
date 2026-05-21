@@ -38,6 +38,7 @@ import org.stypox.dicio.settings.datastore.InputDevice.UNRECOGNIZED
 import org.stypox.dicio.settings.datastore.SttPlaySound
 import org.stypox.dicio.settings.datastore.UserSettings
 import org.stypox.dicio.util.distinctUntilChangedBlockingFirst
+import org.stypox.dicio.util.resolveInputDeviceSetting
 import org.stypox.dicio.util.toStateFlowDistinctBlockingFirst
 
 
@@ -63,6 +64,7 @@ class SttInputDeviceWrapperImpl(
     private val scope = CoroutineScope(Dispatchers.Default)
 
     private var inputDeviceSetting: InputDevice
+    private var effectiveInputDeviceSetting: InputDevice
     private var sttPlaySoundSetting: SttPlaySound
     private val silencesBeforeStop: StateFlow<Int>
     private val scribeApiKey: StateFlow<String>
@@ -87,7 +89,8 @@ class SttInputDeviceWrapperImpl(
         scribeApiKey = dataStore.data
             .map { it.scribeApiKey.trim() }
             .toStateFlowDistinctBlockingFirst(scope)
-        sttInputDevice = buildInputDevice(inputDeviceSetting)
+        effectiveInputDeviceSetting = normalizeInputDeviceSetting(inputDeviceSetting)
+        sttInputDevice = buildInputDevice(effectiveInputDeviceSetting)
         scope.launch {
             restartUiStateJob()
         }
@@ -100,26 +103,36 @@ class SttInputDeviceWrapperImpl(
                 }
             }
         }
+
+        scope.launch {
+            localeManager.locale.collect {
+                val normalized = normalizeInputDeviceSetting(inputDeviceSetting)
+                if (normalized != effectiveInputDeviceSetting) {
+                    changeInputDeviceTo(inputDeviceSetting)
+                }
+            }
+        }
     }
 
     private suspend fun changeInputDeviceTo(setting: InputDevice) {
         val prevSttInputDevice = sttInputDevice
-        inputDeviceSetting = normalizeInputDeviceSetting(setting)
-        sttInputDevice = buildInputDevice(inputDeviceSetting)
+        inputDeviceSetting = setting
+        val normalizedSetting = normalizeInputDeviceSetting(setting)
+        if (normalizedSetting == effectiveInputDeviceSetting) {
+            return
+        }
+        effectiveInputDeviceSetting = normalizedSetting
+        sttInputDevice = buildInputDevice(normalizedSetting)
         prevSttInputDevice?.destroy()
         restartUiStateJob()
     }
 
     private fun normalizeInputDeviceSetting(setting: InputDevice): InputDevice {
-        return if (setting == INPUT_DEVICE_PARAKEET && Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
-            INPUT_DEVICE_VOSK
-        } else {
-            setting
-        }
+        return resolveInputDeviceSetting(setting, localeManager.locale.value, Build.VERSION.SDK_INT)
     }
 
     private fun buildInputDevice(setting: InputDevice): SttInputDevice? {
-        return when (normalizeInputDeviceSetting(setting)) {
+        return when (setting) {
             UNRECOGNIZED,
             INPUT_DEVICE_UNSET,
             INPUT_DEVICE_VOSK -> VoskInputDevice(appContext, okHttpClient, localeManager, silencesBeforeStop)
